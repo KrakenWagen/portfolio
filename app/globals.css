@@ -45,7 +45,7 @@
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
+  --background: #fff;
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -79,7 +79,7 @@
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
+  --background: #030816;
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
   --card-foreground: oklch(0.985 0 0);
@@ -119,4 +119,183 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+
+  .scrollbar-thumb-green-600 {
+    scrollbar-color: #059669 transparent;
+  }
+
+  .scrollbar-track-gray-800 {
+    scrollbar-color: #1f2937 transparent;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes tv-flash-1 {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  15% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  30% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes tv-flash-2 {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 0;
+  }
+  35% {
+    opacity: 0.8;
+    transform: scaleY(0.1);
+  }
+  50% {
+    opacity: 0;
+    transform: scaleY(1);
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes tv-flash-3 {
+  0% {
+    opacity: 0;
+  }
+  40% {
+    opacity: 0;
+  }
+  55% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 0.3;
+  }
+  85% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes tv-static {
+  0% {
+    background: radial-gradient(circle, white 1px, transparent 1px);
+    background-size: 4px 4px;
+    opacity: 0;
+  }
+  50% {
+    background: radial-gradient(circle, white 1px, transparent 1px);
+    background-size: 6px 6px;
+    opacity: 0.3;
+  }
+  100% {
+    background: radial-gradient(circle, white 1px, transparent 1px);
+    background-size: 2px 2px;
+    opacity: 0;
+  }
+}
+
+@keyframes tv-fade {
+  0% {
+    opacity: 0;
+  }
+  60% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes tv-scanlines {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+@keyframes tv-on {
+  0% {
+    transform: scaleY(0.01) scaleX(0.8);
+    opacity: 0;
+  }
+  100% {
+    transform: scaleY(1) scaleX(1);
+    opacity: 1;
+  }
+}
+
+.animate-tv-flash-1 {
+  animation: tv-flash-1 1.2s ease-out forwards;
+}
+
+.animate-tv-flash-2 {
+  animation: tv-flash-2 1.2s ease-out forwards;
+}
+
+.animate-tv-flash-3 {
+  animation: tv-flash-3 1.2s ease-out forwards;
+}
+
+.animate-tv-static {
+  animation: tv-static 1.2s ease-out forwards;
+}
+
+.animate-tv-fade {
+  animation: tv-fade 1.2s ease-out forwards;
+}
+
+.animate-tv-scanlines {
+  animation: tv-scanlines 1.2s linear forwards;
+}
+
+.animate-tv-on {
+  animation: tv-on 0.3s ease-out forwards;
+}
+
+.animate-tv-blast {
+  transform-origin: center;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-in-out;
 }
