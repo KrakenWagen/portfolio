@@ -6,12 +6,14 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "deploy": "pnpx vercel"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.3",
     "@react-three/drei": "^10.1.2",
     "@react-three/fiber": "^9.1.2",
+    "@vercel/analytics": "^1.5.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "leva": "^0.10.0",

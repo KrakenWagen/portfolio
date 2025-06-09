@@ -230,10 +230,10 @@ export default function Terminal({ onExit }: TerminalProps) {
   }, [])
 
   return (
-    <div className="h-screen bg-black text-white font-mono p-4 overflow-hidden animate-tv-on">
+    <div className="h-dvh bg-black text-white font-mono p-4 overflow-hidden animate-tv-on">
       <div
         ref={terminalRef}
-        className="h-screen overflow-y-auto scrollbar-thin scrollbar-thumb-green-600 scrollbar-track-gray-800"
+        className="h-dvh overflow-y-auto scrollbar-thin scrollbar-thumb-green-600 scrollbar-track-gray-800"
       >
         <div className="mb-4">
           {terminalHistory.map((entry, index) => (
