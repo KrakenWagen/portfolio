@@ -63,7 +63,7 @@ export const portfolioConfig = {
       location: "Tampere, FI",
       years: "2020 - 2022",
       description:
-        "Digital monitoring and evaluation of international developments.",
+        "Digital monitoring and evaluation for international developments.",
     },
     {
       position: "Solo Developer",
