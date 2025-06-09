@@ -80,7 +80,7 @@ export default function Hero({ onTerminalClick, showNav }: HeroProps) {
             className="inline-block animate-fade-in"
             style={{
               animation: "fadeIn 0.5s ease-in-out",
-              textShadow: "0 0 25px hsl(var(--background))",
+              textShadow: "0 0 64px var(--background)",
             }}
           >
             {portfolioConfig.hero.words[currentWord]}
@@ -88,7 +88,7 @@ export default function Hero({ onTerminalClick, showNav }: HeroProps) {
         </h1>
         <p className="text-lg md:text-xl lg:text-2xl text-gray-800 dark:text-gray-200 font-light"
         style={{
-          textShadow: "0 0 25px hsl(var(--background))",
+          textShadow: "0 0 6px var(--background), 0 0 32px var(--background)",
         }}>
           {portfolioConfig.personal.name} • {portfolioConfig.personal.title}
         </p>

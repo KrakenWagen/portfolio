@@ -143,7 +143,7 @@ void main() {
   color = pow(color, vec3(1.0 / 2.2));
 
   // HACK: Adaptive saturation boost for brighter backgrounds
-  float contrast = mix(1.0, 8.0, smoothstep(0.0, 1.0, bgLuminance));
+  float contrast = mix(1.0, 6.0, smoothstep(0.0, 1.0, bgLuminance));
   vec3 midpoint = vec3(0.74);
   color = (color - midpoint) * contrast + midpoint;
   
