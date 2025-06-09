@@ -1,15 +1,19 @@
 export const portfolioConfig = {
   personal: {
-    name: "Alex Johnson",
+    name: "Felix Bernal",
     title: "Software Engineer",
-    location: "San Francisco, CA",
-    email: "alex@example.com",
-    github: "github.com/alexdev",
-    linkedin: "linkedin.com/in/alexdev",
+    location: "Zaragoza, ES",
+    email: "felixbernalsierra@gmail.com",
+    github: "https://github.com/KrakenWagen",
+    linkedin: "https://linkedin.com/in/felix-bernal-sierra",
     availability: {
       remote: true,
       openToOpportunities: true,
     },
+  },
+
+  terminal: {
+    whoami: "xilef"
   },
 
   hero: {
@@ -27,99 +31,111 @@ export const portfolioConfig = {
 
   about: {
     description: [
-      "I'm a software engineer with 5+ years of experience building web applications. I specialize in full-stack development with a focus on clean architecture and user experience.",
-      "Currently working with modern technologies like React, Node.js, and cloud platforms to create scalable solutions for complex problems.",
+      "I'm a software engineer with 10+ years of experience building software solutions, web applications.", "Interested in Artificial Intelligence, backend and full-stack development, graphics and computer vision, distributed systems and much more...",
     ],
     skills: [
       "JavaScript, TypeScript, React, Next.js",
-      "Node.js, Python, Express, FastAPI",
-      "PostgreSQL, MongoDB, Redis",
-      "Docker, AWS, CI/CD, Linux",
+      "Node.js, Python, Express, Ruby on Rails",
+      "MySQL, PostgreSQL, DynamoDB, Redis",
+      "Docker, AWS, CI/CD, Linux...",
     ],
   },
 
   experience: [
     {
       position: "Senior Software Engineer",
-      company: "Tech Innovations Inc.",
-      location: "San Francisco, CA",
+      company: "Microhealth",
+      location: "Zaragoza, ES",
       years: "2022 - Present",
       description:
-        "Lead developer for cloud-based enterprise solutions. Architected and implemented scalable microservices using Node.js and Kubernetes.",
+        "We build digital tools for people living with blood conditions.",
     },
     {
-      position: "Full Stack Developer",
-      company: "Digital Solutions Group",
-      location: "San Francisco, CA",
+      position: "Software Engineer",
+      company: "Devhello",
+      location: "Zaragoza, ES",
+      years: "2016 - Present",
+      description: "Technology solutions tailored for unique client needs.",
+    },
+    {
+      position: "Software Engineer",
+      company: "Adalia Oy",
+      location: "Tampere, FI",
       years: "2020 - 2022",
       description:
-        "Developed and maintained web applications for financial services clients using React, TypeScript, and GraphQL.",
+        "Digital monitoring and evaluation of international developments.",
     },
     {
-      position: "Software Engineering Intern",
-      company: "StartUp Ventures",
-      location: "Palo Alto, CA",
-      years: "Summer 2019",
-      description: "Contributed to front-end development using React and implemented RESTful APIs with Express.",
+      position: "Solo Developer",
+      company: "Afropixel Games",
+      location: "Zaragoza, ES",
+      years: "2014 - 2019",
+      description: "Game studio specialized in voxel-based games.",
     },
   ],
 
   education: [
     {
-      degree: "Master of Science in Computer Science",
-      school: "Stanford University",
-      location: "Stanford, CA",
-      years: "2018 - 2020",
-      description: "Specialized in Artificial Intelligence and Machine Learning",
+      degree: "Master in Robotics, Graphics and Computer Vision",
+      school: "Universidad de Zaragoza",
+      location: "Zaragoza, ES",
+      years: "2019 - 2021",
+      tags: ["With honors"],
+      description: [
+        "Specialized in Artificial Intelligence and Computer Vision",
+        "Thesis Grade: 10/10",
+      ],
     },
     {
       degree: "Bachelor of Science in Software Engineering",
-      school: "University of California, Berkeley",
-      location: "Berkeley, CA",
+      school: "Universidad de Zaragoza",
+      location: "Zaragoza, ES",
       years: "2014 - 2018",
-      description: "Minor in Mathematics",
+      description: [
+        "Specialized in Computing",
+        "Thesis Grade: 9.5/10"
+      ],
     },
   ],
 
   projects: [
     {
-      title: "E-Commerce Platform",
+      title: "Audio-visual saliency prediction for 360° video via deep learning",
       description:
-        "Full-stack solution with React, Node.js, and PostgreSQL featuring real-time inventory management and payment processing",
-      tech: ["React", "Node.js", "PostgreSQL"],
-      year: "2024",
-      image: "/placeholder.svg?height=300&width=500",
-      github: "#",
-      live: "#",
+        "Developed an innovative neural network-based solution that predicts visual attention in 360-degree virtual reality videos by integrating both visual and audio information.",
+      tech: ["Python", "Computer Vision", "AI", "TensorFlow"],
+      year: "2022",
+      image: "/vr.png",
+      read: 'https://zaguan.unizar.es/record/120377?ln=es',
+      github: 'https://github.com/KrakenWagen/PAVS_2022',
     },
     {
-      title: "Task Management App",
+      title: "Single scattering and direct illumination rendering using multidimensional control variates",
       description:
-        "Real-time collaborative tool with WebSocket integration, featuring team workspaces and project tracking",
-      tech: ["Next.js", "Socket.io", "MongoDB"],
-      year: "2024",
-      image: "/placeholder.svg?height=300&width=500",
-      github: "#",
-      live: "#",
+        "Developed a light rendering solution that outperformed the widely used Monte Carlo algorithm by employing Newton-Cotes methods as control variates.",
+      tech: ["C++", "Computer Graphics", "Light Rendering"],
+      year: "2020",
+      image: "/scattering.png",
+      read: 'https://zaguan.unizar.es/record/96367?ln=es',
+      live: undefined,
     },
     {
-      title: "API Analytics Dashboard",
-      description: "Performance monitoring system with real-time metrics, custom alerts, and comprehensive reporting",
-      tech: ["React", "D3.js", "Express"],
-      year: "2023",
-      image: "/placeholder.svg?height=300&width=500",
-      github: "#",
-      live: "#",
+      title: "Call of Blocks",
+      description: "Online first-person competitive shooter based on a fully customizable and destructible world and a wide variety of game modes. Obtained multiple awards, including \"Best Game\" in different game conventions.",
+      tech: ["Unity", "C#", "Online"],
+      year: "2015",
+      image: "/cob.png",
+      youtube: "https://www.youtube.com/watch?v=FH3An_MNGxw",
     },
   ],
 
   contact: {
     description:
-      "I'm always interested in new opportunities and collaborations. Feel free to reach out if you'd like to work together.",
-    availability: ["Based in San Francisco, CA", "Available for remote work", "Open to new opportunities"],
+      "I'm always interested in new collaborations. Feel free to reach out if you'd like to work together.",
+    availability: ["Zaragoza 🇪🇸 • Warsaw 🇵🇱 • Tampere 🇫🇮"],
   },
   footer: <p className="text-gray-500 dark:text-gray-400 text-sm text-center">
-            © {new Date().getFullYear()} Alex Johnson • Made with{" "}
+            Made with{" "}
             <span className="text-red-500">❤</span> in T2, Adolfo Suárez Madrid-Barajas
           </p>
 }

@@ -1,4 +1,4 @@
-import { Github, ExternalLink } from "lucide-react"
+import { Github, ExternalLink, YoutubeIcon } from "lucide-react"
 import { portfolioConfig } from "@/config/portfolio"
 
 export default function Work() {
@@ -35,20 +35,34 @@ export default function Work() {
                   ))}
                 </div>
                 <div className="flex gap-4">
-                  <a
+                  {project.github && <a
                     href={project.github}
                     className="inline-flex items-center text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors border-b border-transparent hover:border-black dark:hover:border-white pb-1"
                   >
                     <Github className="w-4 h-4 mr-2" />
                     View Code
-                  </a>
-                  <a
+                  </a>}
+                 {project.youtube && <a
+                    href={project.youtube}
+                    className="inline-flex items-center text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors border-b border-transparent hover:border-black dark:hover:border-white pb-1"
+                  >
+                    <YoutubeIcon className="w-4 h-4 mr-2" />
+                    Watch video
+                  </a>}
+                 {project.live && <a
                     href={project.live}
                     className="inline-flex items-center text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors border-b border-transparent hover:border-black dark:hover:border-white pb-1"
                   >
                     <ExternalLink className="w-4 h-4 mr-2" />
                     Live Demo
-                  </a>
+                  </a>}
+                 {project.read && <a
+                    href={project.read}
+                    className="inline-flex items-center text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors border-b border-transparent hover:border-black dark:hover:border-white pb-1"
+                  >
+                    <ExternalLink className="w-4 h-4 mr-2" />
+                    Read
+                  </a>}
                 </div>
               </div>
             </div>

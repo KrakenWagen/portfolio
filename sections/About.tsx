@@ -16,9 +16,7 @@ export default function About() {
           <div>
             <h3 className="text-lg font-medium mb-4">Skills</h3>
             <div className="space-y-2 text-gray-700 dark:text-gray-300">
-              {portfolioConfig.about.skills.map((skill, index) => (
-                <div key={index}>{skill}</div>
-              ))}
+              {portfolioConfig.about.skills.join(', ')}
             </div>
           </div>
         </div>

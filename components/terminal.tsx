@@ -12,7 +12,7 @@ export default function Terminal({ onExit }: TerminalProps) {
   const [terminalHistory, setTerminalHistory] = useState<
     Array<{ text: string; type: "normal" | "success" | "error" | "info" | "command" }>
   >([
-    { text: `Welcome to ${portfolioConfig.personal.name}'s Terminal Portfolio`, type: "success" },
+    { text: `Welcome to ${portfolioConfig.personal.name}'s Terminal Portfolio`, type: "info" },
     { text: 'Type "help" for available commands or use Tab for autocomplete', type: "info" },
     { text: "", type: "normal" },
   ])
@@ -25,7 +25,6 @@ export default function Terminal({ onExit }: TerminalProps) {
   const availableCommands = [
     "help",
     "about",
-    "skills",
     "experience",
     "education",
     "projects",
@@ -64,7 +63,7 @@ export default function Terminal({ onExit }: TerminalProps) {
       } else if (suggestions.length > 1) {
         // Show all suggestions
         const newHistory = [...terminalHistory]
-        newHistory.push({ text: `alex@portfolio:~$ ${currentCommand}`, type: "command" })
+        newHistory.push({ text: `${portfolioConfig.terminal.whoami}@portfolio:~$ ${currentCommand}`, type: "command" })
         newHistory.push({ text: suggestions.join("  "), type: "info" })
         newHistory.push({ text: "", type: "normal" })
         setTerminalHistory(newHistory)
@@ -82,13 +81,12 @@ export default function Terminal({ onExit }: TerminalProps) {
   const handleCommand = () => {
     const command = currentCommand.trim().toLowerCase()
     const newHistory = [...terminalHistory]
-    newHistory.push({ text: `alex@portfolio:~$ ${currentCommand}`, type: "command" })
+    newHistory.push({ text: `${currentCommand}`, type: "command" })
 
     switch (command) {
       case "help":
-        newHistory.push({ text: "Available commands:", type: "success" })
+        newHistory.push({ text: "Available commands:", type: "normal" })
         newHistory.push({ text: "  about     - Learn about me", type: "normal" })
-        newHistory.push({ text: "  skills    - View my technical skills", type: "normal" })
         newHistory.push({ text: "  experience - View my work experience", type: "normal" })
         newHistory.push({ text: "  education - View my educational background", type: "normal" })
         newHistory.push({ text: "  projects  - See my recent projects", type: "normal" })
@@ -104,74 +102,80 @@ export default function Terminal({ onExit }: TerminalProps) {
         break
       case "about":
         newHistory.push({
-          text: portfolioConfig.about.description.join("\n\n"),
+          text: (portfolioConfig.about.description.concat(
+            ["Some technical skills:"].concat( 
+              portfolioConfig.about.skills.map((skill) => `• ${skill}`)).join("\n")
+            )
+          ).join("\n\n"),
           type: "info",
-        })
-        break
-      case "skills":
-        newHistory.push({ text: "Technical Skills:", type: "success" })
-        portfolioConfig.about.skills.forEach((skill) => {
-          newHistory.push({ text: `• ${skill}`, type: "info" })
-        })
+        })        
         break
       case "experience":
-        newHistory.push({ text: "Work Experience:", type: "success" })
         portfolioConfig.experience.forEach((job, index) => {
           newHistory.push({
-            text: `${job.position} at ${job.company} (${job.years})`,
+            text: `# ${job.position} at ${job.company} (${job.years})`,
             type: "info",
           })
-          newHistory.push({ text: `${job.location}`, type: "normal" })
-          newHistory.push({ text: `${job.description}`, type: "normal" })
+          newHistory.push({ text: `${job.location}`, type: "info" })
+          newHistory.push({ text: `${job.description}`, type: "info" })
           if (index < portfolioConfig.experience.length - 1) {
-            newHistory.push({ text: "", type: "normal" })
+            newHistory.push({ text: "\n", type: "info" })
           }
         })
         break
       case "education":
-        newHistory.push({ text: "Education:", type: "success" })
         portfolioConfig.education.forEach((edu, index) => {
           newHistory.push({
-            text: `${edu.degree} - ${edu.school} (${edu.years})`,
+            text: `# ${edu.degree} - ${edu.school} (${edu.years})`,
             type: "info",
           })
-          newHistory.push({ text: `${edu.location}`, type: "normal" })
-          newHistory.push({ text: `${edu.description}`, type: "normal" })
+          newHistory.push({ text: `${edu.location}`, type: "info" })
+          newHistory.push({ text: `${edu.description.join("\n")}`, type: "info" })
           if (index < portfolioConfig.education.length - 1) {
-            newHistory.push({ text: "", type: "normal" })
+            newHistory.push({ text: "\n", type: "info" })
           }
         })
         break
       case "projects":
-        newHistory.push({ text: "Recent Projects:", type: "success" })
+        newHistory.push({ text: "# Featured Projects:", type: "info" })
+        newHistory.push({ text: "\n", type: "info" })
         portfolioConfig.projects.forEach((project, index) => {
           newHistory.push({
-            text: `${index + 1}. ${project.title} (${project.year})`,
+            text: `## ${index + 1}. ${project.title} (${project.year})`,
             type: "info",
           })
-          newHistory.push({ text: `${project.description}`, type: "normal" })
-          newHistory.push({ text: `Technologies: ${project.tech.join(", ")}`, type: "normal" })
-          newHistory.push({ text: `GitHub: ${project.github}`, type: "normal" })
-          newHistory.push({ text: `Live Demo: ${project.live}`, type: "normal" })
+          newHistory.push({ text: `${project.description}`, type: "info" })
+          newHistory.push({ text: `Technologies: ${project.tech.join(", ")}`, type: "info" })
+          if(project.github){
+            newHistory.push({ text: `GitHub: ${project.github}`, type: "info" })
+          }
+          if(project.read){
+            newHistory.push({ text: `Read: ${project.read}`, type: "info" })
+          }
+          if(project.youtube){
+            newHistory.push({ text: `Watch video: ${project.youtube}`, type: "info" })
+          }
+          if(project.live){
+            newHistory.push({ text: `Live Demo: ${project.live}`, type: "info" })
+          }
           if (index < portfolioConfig.projects.length - 1) {
-            newHistory.push({ text: "", type: "normal" })
+            newHistory.push({ text: "\n", type: "info" })
           }
         })
         break
       case "contact":
-        newHistory.push({ text: "Contact Information:", type: "success" })
+        newHistory.push({ text: portfolioConfig.contact.description, type: "info" })
+        newHistory.push({ text: "\n", type: "info" })
         newHistory.push({ text: `• Email: ${portfolioConfig.personal.email}`, type: "info" })
         newHistory.push({ text: `• GitHub: ${portfolioConfig.personal.github}`, type: "info" })
         newHistory.push({ text: `• LinkedIn: ${portfolioConfig.personal.linkedin}`, type: "info" })
-        newHistory.push({ text: "", type: "normal" })
-        newHistory.push({ text: portfolioConfig.contact.description, type: "normal" })
         break
       case "whoami":
-        newHistory.push({ text: portfolioConfig.personal.name.toLowerCase().replace(" ", ""), type: "info" })
+        newHistory.push({ text: portfolioConfig.terminal.whoami, type: "info" })
         break
       case "pwd":
         newHistory.push({
-          text: `/home/${portfolioConfig.personal.name.toLowerCase().replace(" ", "")}/portfolio`,
+          text: `/home/${portfolioConfig.terminal.whoami}/portfolio`,
           type: "info",
         })
         break
@@ -187,7 +191,7 @@ export default function Terminal({ onExit }: TerminalProps) {
       case "history":
         const commands = terminalHistory
           .filter((entry) => entry.type === "command")
-          .map((entry, index) => `${index + 1}  ${entry.text.replace("alex@portfolio:~$ ", "")}`)
+          .map((entry, index) => `${index + 1}  ${entry.text.replace(`${portfolioConfig.terminal.whoami}@portfolio:~$ `, "")}`)
         commands.forEach((cmd) => newHistory.push({ text: cmd, type: "info" }))
         break
       case "clear":
@@ -236,7 +240,7 @@ export default function Terminal({ onExit }: TerminalProps) {
             <div key={index} className="whitespace-pre-wrap">
               {entry.type === "command" ? (
                 <div className="flex">
-                  <span className="text-green-400">{portfolioConfig.personal.name.toLowerCase().replace(" ", "")}</span>
+                  <span className="text-green-400">{portfolioConfig.terminal.whoami}</span>
                   <span className="text-white">@</span>
                   <span className="text-blue-400">portfolio</span>
                   <span className="text-white">:</span>
@@ -244,7 +248,7 @@ export default function Terminal({ onExit }: TerminalProps) {
                   <span className="text-white">$ </span>
                   <span className="text-yellow-300">
                     {entry.text.replace(
-                      `${portfolioConfig.personal.name.toLowerCase().replace(" ", "")}@portfolio:~$ `,
+                      `${portfolioConfig.terminal.whoami}@portfolio:~$ `,
                       "",
                     )}
                   </span>
@@ -268,7 +272,7 @@ export default function Terminal({ onExit }: TerminalProps) {
           ))}
 
           <div className="flex items-center relative">
-            <span className="text-green-400">{portfolioConfig.personal.name.toLowerCase().replace(" ", "")}</span>
+            <span className="text-green-400">{portfolioConfig.terminal.whoami}</span>
             <span className="text-white">@</span>
             <span className="text-blue-400">portfolio</span>
             <span className="text-white">:</span>
