@@ -2,6 +2,10 @@
 
 A modern, interactive personal portfolio website built with Next.js 15, React 19, and Three.js. Features a sleek design with dark/light theme support, interactive 3D elements, and a functional terminal interface.
 
+*💡 Fun fact: This portfolio was coded during a few hours of waiting at Madrid Atocha T4 airport! ✈️*
+
+**Live Demo**: [https://www.felixbernal.es](https://www.felixbernal.es) | **LinkedIn**: [Felix Bernal Sierra](https://linkedin.com/in/felix-bernal-sierra)
+
 ![Portfolio Preview](https://img.shields.io/badge/Next.js-15.3.3-black?style=for-the-badge&logo=next.js)
 ![React](https://img.shields.io/badge/React-19.0.0-blue?style=for-the-badge&logo=react)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)
@@ -12,7 +16,7 @@ A modern, interactive personal portfolio website built with Next.js 15, React 19
 - **🎨 Modern Design**: Clean, responsive design with smooth animations
 - **🌙 Dark/Light Theme**: Toggle between dark and light modes
 - **🖥️ Interactive Terminal**: Functional terminal interface with custom commands
-- **🎮 3D Elements**: Three.js powered refracting 3D visual effect
+- **🎮 3D Elements**: Three.js powered refracting 3D visual effect (inspired by [Maxime Heckel's blog post](https://blog.maximeheckel.com/posts/refraction-dispersion-and-other-shader-light-effects/))
 - **📱 Mobile Responsive**: Optimized for all device sizes
 - **⚡ Performance**: Built with Next.js 15 and Turbopack for optimal performance
 - **🔍 SEO Optimized**: Meta tags and structured data for better search visibility
@@ -107,7 +111,6 @@ portfolio/
 The portfolio features a fully functional terminal interface accessible via the "Terminal" button. It includes:
 - Custom command system
 - Portfolio information commands
-- Theme switching
 - Navigation shortcuts
 
 ### 3D Visual Effects
