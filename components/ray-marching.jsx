@@ -161,7 +161,6 @@ function LerpedBackground() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      console.log("CHECKING")
       const cssColor = getComputedStyle(document.body)
         .backgroundColor;
 
