@@ -32,7 +32,7 @@ export default function Hero({ onTerminalClick, showNav }: HeroProps) {
 
 
   return (
-    <section className="h-dvh flex flex-col items-center justify-center px-6 relative overflow-hidden">
+    <section className="h-svh flex flex-col items-center justify-center px-6 relative overflow-hidden">
       {/* ASCII Cloud Background
       <div className="absolute inset-0 z-0">
         <AsciiCloud />
