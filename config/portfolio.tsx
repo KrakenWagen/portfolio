@@ -6,10 +6,6 @@ export const portfolioConfig = {
     email: "felixbernalsierra@gmail.com",
     github: "https://github.com/KrakenWagen",
     linkedin: "https://linkedin.com/in/felix-bernal-sierra",
-    availability: {
-      remote: true,
-      openToOpportunities: true,
-    },
   },
 
   terminal: {
