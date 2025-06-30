@@ -83,7 +83,7 @@ export const portfolioConfig = {
       ],
     },
     {
-      degree: "Bachelor of Science in Software Engineering",
+      degree: "Bachelor of Science in Computer Engineering",
       school: "Universidad de Zaragoza",
       location: "Zaragoza, ES",
       years: "2014 - 2018",
@@ -114,6 +114,14 @@ export const portfolioConfig = {
       image: "/scattering.png",
       read: 'https://zaguan.unizar.es/record/96367?ln=es',
       live: undefined,
+    },
+    {
+      title: "CS2D Remake",
+      description: "Remake of the game Counter-Strike 2D with AI bots to allow for a fun and customizable offline experience. Built on a custom slim game engine made with JavaFX. Designed and developed in 4 months.",
+      tech: ["Java", "JavaFX", "AI"],
+      year: "2020",
+      image: "/cs2d.png",
+      youtube: "https://www.youtube.com/watch?v=VB63VldVqeU",
     },
     {
       title: "Call of Blocks",
