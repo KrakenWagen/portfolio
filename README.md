@@ -155,6 +155,10 @@ Edit `config/portfolio.tsx` to update:
 - Project showcase
 - Skills and technologies
 
+Modify `app/layout.tsx`
+- Title
+- Opengraph meta tags
+
 ### Styling
 - Modify `app/globals.css` for global styles
 - Setup Tailwind configuration in `tailwind.config.js` (create file if not present)
