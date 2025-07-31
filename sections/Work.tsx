@@ -23,7 +23,7 @@ export default function Work() {
                   <h3 className="text-2xl font-medium">{project.title}</h3>
                   <span className="text-gray-500 dark:text-gray-400 text-sm">{project.year}</span>
                 </div>
-                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-6">{project.description}</p>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-6">{project.description.split('\n').map((e, i) => <span key={i}>{e}<br /></span>)}</p>
                 <div className="flex flex-wrap gap-2 mb-6">
                   {project.tech.map((tech) => (
                     <span
