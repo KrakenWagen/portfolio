@@ -116,7 +116,7 @@ export const portfolioConfig = {
     {
       title: "Autonomous Drone Collaboration: Catch me if you can",
       description:
-        "Designed and implemented a drone coordination system using onboard stereo vision and predictive modeling. The multi-drone formation control algorithm enables a team of UAVs to estimate a ball's 3D trajectory and dynamically position themselves to catch it with a shared net. \n \n This project, showcased advanced perception, trajectory prediction, and swarm behavior in a physically realistic simulation framework.",
+        "Designed and implemented a drone coordination system using onboard stereo vision and predictive modeling. The multi-drone formation control algorithm enables a team of UAVs to estimate a ball's 3D trajectory and dynamically position themselves to catch it with a shared net. \n \n This project showcased advanced perception, trajectory prediction, and swarm behavior in a physically realistic simulation framework.",
       tech: ["C++", "ROS", "Flightmare", "Unity"],
       year: "2021",
       image: "/drones.png",
