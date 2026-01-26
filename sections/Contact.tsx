@@ -5,7 +5,7 @@ export default function Contact() {
   return (
     <section id="contact" className="py-20 px-6 border-t border-gray-200 dark:border-gray-800">
       <div className="container mx-auto max-w-4xl">
-        <h2 className="text-3xl font-light mb-12">Get In Touch</h2>
+        <h2 className="text-6xl font-black mb-12">Get In Touch</h2>
         <div className="grid md:grid-cols-2 gap-12">
           <div>
             <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-8">

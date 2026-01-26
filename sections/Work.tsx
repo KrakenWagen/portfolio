@@ -5,7 +5,7 @@ export default function Work() {
   return (
     <section id="work" className="py-20 px-6 border-t border-gray-200 dark:border-gray-800">
       <div className="container mx-auto max-w-4xl">
-        <h2 className="text-3xl font-light mb-12">Selected Work</h2>
+        <h2 className="text-5xl font-black mb-12">Selected Work</h2>
         <div className="space-y-16">
           {portfolioConfig.projects.map((project, index) => (
             <div key={index} className="grid md:grid-cols-2 gap-8 items-center">
