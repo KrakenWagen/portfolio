@@ -27,13 +27,46 @@ export const portfolioConfig = {
 
   about: {
     description: [
-      "I'm a software engineer with 10+ years of experience building software solutions, web applications.", "Interested in Artificial Intelligence, backend and full-stack development, graphics and computer vision, distributed systems and much more...",
+      "Software engineer and tech enthusiast with 10+ years of experience building software.", "Reasoning across hardware, software, and maths to solve messy, cross-disciplinary problems.", "Artificial Intelligence, backend and full-stack development, graphics and computer vision, distributed systems, robotics, reverse engineering, videogames...",
     ],
-    skills: [
-      "JavaScript, TypeScript, React, Next.js",
-      "Node.js, Python, Express, Ruby on Rails",
-      "MySQL, PostgreSQL, DynamoDB, Redis",
-      "Docker, AWS, CI/CD, Linux...",
+    tools: [
+      // Core languages & ecosystems
+      "TypeScript, Python, C++, Rust, Java, .NET, Assembly",
+
+      // Frontend & interactive systems
+      "React, Next.js, WebGL, Three.js, WASM",
+
+      // Backend & systems
+      "Node.js, FastAPI, Ruby on Rails",
+
+      // Graphics, vision, robotics
+      "OpenGL, Vulkan, CUDA, OpenCV, ROS",
+
+      // Machine learning & AI (applied)
+      "TensorFlow, PyTorch",
+
+      // Random
+      "Bartending",
+
+      // Game
+      "Unity, Unreal Engine",
+
+      // Data & storage
+      "PostgreSQL, MySQL, DynamoDB, Redis",
+
+      // Infrastructure & deployment
+      "Docker, Kubernetes, AWS, Terraform, Ansible",
+
+      // CI/CD & build systems
+      "Git, CMake",
+
+      // OS, performance & debugging
+      "Linux, Profilers, Debuggers",
+
+      // Math & scientific computing
+      "NumPy, SciPy, Polars, Airflow",
+
+      "etc"
     ],
   },
 
@@ -107,7 +140,7 @@ export const portfolioConfig = {
     },
     {
       title: "AI Cover Letter and Resume Generator: Resumine",
-      description: "Designed and developed a web-based SaaS platform that leverages AI to help users create personalized cover letters and resumes efficiently. The application features intelligent content suggestions, customization options, and seamless user experience to streamline the job application process.\n\n Implemented a subscription-based business model to attract and retain paying users, leading the project to a successful exit through sale to a private acquirer.",
+      description: "Designed and developed a web-based SaaS platform that leverages AI to help users create personalized cover letters and resumes efficiently. The application features intelligent content suggestions, customization options, and seamless user experience to streamline the job application process.",
       tech: ["AI", "React", "Next.js", "Supabase", "TypeScript", "Node.js", "PostgreSQL"],
       year: "2022",
       image: "/resumine.png",
@@ -151,7 +184,7 @@ export const portfolioConfig = {
     },
     {
       title: "Online competitive first-person shooter: Call of Blocks",
-      description: "At age 16, I created a competitive online first-person shooter featuring fully customizable, destructible environments and diverse game modes. Players can alter the map in real time, adding a dynamic layer of strategy and replayability.\n\nThe game received multiple awards, including “Best Game” at several conventions, recognized for its innovation, polish, and depth. Designed to support competitive play while enabling creative freedom through user-driven world manipulation.",
+      description: "At age 16, I developed a competitive online first-person shooter featuring fully customizable, destructible environments and diverse game modes. Players can alter the map in real time, adding a dynamic layer of strategy and replayability.\n\nThe game received multiple awards, including “Best Game” at several conventions, recognized for its innovation, polish, and depth. Designed to support competitive play while enabling creative freedom through user-driven world manipulation.",
       tech: ["Unity", "C#", "Online"],
       year: "2015",
       image: "/cob.png",

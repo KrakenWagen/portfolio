@@ -14,9 +14,9 @@ export default function About() {
             ))}
           </div>
           <div>
-            <h3 className="text-lg font-medium mb-4">Skills</h3>
+            <h3 className="text-lg font-medium mb-4">Tools</h3>
             <div className="space-y-2 text-gray-700 dark:text-gray-300">
-              {portfolioConfig.about.skills.join(', ')}
+              {portfolioConfig.about.tools.join(', ')}
             </div>
           </div>
         </div>

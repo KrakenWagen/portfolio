@@ -103,8 +103,8 @@ export default function Terminal({ onExit }: TerminalProps) {
       case "about":
         newHistory.push({
           text: (portfolioConfig.about.description.concat(
-            ["Some technical skills:"].concat( 
-              portfolioConfig.about.skills.map((skill) => `• ${skill}`)).join("\n")
+            ["Some specific technologies:"].concat( 
+              portfolioConfig.about.tools.map((skill) => `• ${skill}`)).join("\n")
             )
           ).join("\n\n"),
           type: "info",
