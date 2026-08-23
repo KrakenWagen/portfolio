@@ -49,17 +49,30 @@ export default function Work() {
   const itemRefs = useRef<(HTMLElement | null)[]>([])
   const scrollingRef = useRef(false)
   const scrollClearTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const [isDesktop, setIsDesktop] = useState(false)
   const [scrollIndex, setScrollIndex] = useState(0)
   const [hoverIndex, setHoverIndex] = useState<number | null>(null)
   const activeIndex = hoverIndex ?? scrollIndex
   const activeProject = projects[activeIndex]
 
   useEffect(() => {
+    const media = window.matchMedia("(min-width: 1024px)")
+    const syncDesktop = () => setIsDesktop(media.matches)
+    syncDesktop()
+    media.addEventListener("change", syncDesktop)
+    return () => media.removeEventListener("change", syncDesktop)
+  }, [])
+
+  useEffect(() => {
+    if (!isDesktop) {
+      setHoverIndex(null)
+      return
+    }
+
     const items = itemRefs.current.filter(Boolean) as HTMLElement[]
     if (items.length === 0) return
 
     const updateActiveFromScroll = () => {
-      // While scrolling, scroll owns the active state — clear hover so they don't fight
       scrollingRef.current = true
       setHoverIndex(null)
 
@@ -90,10 +103,10 @@ export default function Work() {
       window.removeEventListener("resize", updateActiveFromScroll)
       if (scrollClearTimer.current) clearTimeout(scrollClearTimer.current)
     }
-  }, [projects.length])
+  }, [isDesktop, projects.length])
 
   const handleItemEnter = (index: number) => {
-    if (scrollingRef.current) return
+    if (!isDesktop || scrollingRef.current) return
     setHoverIndex(index)
   }
 
@@ -108,24 +121,6 @@ export default function Work() {
           />
         </Reveal>
 
-        {/* Mobile visual */}
-        <Reveal delay={60} className="lg:hidden mb-8">
-          <div className="relative aspect-[16/10] overflow-hidden bg-white dark:bg-gray-900">
-            {projects.map((project, index) => (
-              <img
-                key={`${project.title}-mobile`}
-                src={project.image || "/placeholder.svg"}
-                alt=""
-                className={cn(
-                  "absolute inset-0 h-full w-full object-contain transition-opacity duration-700 motion-reduce:transition-none",
-                  index === activeIndex ? "opacity-100" : "opacity-0",
-                )}
-              />
-            ))}
-          </div>
-          <ProjectLinks project={activeProject} className="mt-4" />
-        </Reveal>
-
         <div className="border-t border-gray-200 dark:border-gray-800 lg:grid lg:grid-cols-[minmax(0,1.15fr)_minmax(260px,0.8fr)] lg:gap-14 lg:items-start">
           <div
             className="border-b border-gray-200 dark:border-gray-800 lg:border-b-0"
@@ -133,7 +128,7 @@ export default function Work() {
           >
             {projects.map((project, index) => {
               const summary = projectSummary(project.description)
-              const isActive = index === activeIndex
+              const isActive = isDesktop && index === activeIndex
               const isLast = index === projects.length - 1
 
               return (
@@ -144,11 +139,13 @@ export default function Work() {
                   }}
                   onMouseEnter={() => handleItemEnter(index)}
                   className={cn(
-                    "py-6 pl-4 -ml-4 border-l-2 transition-[border-color,opacity] duration-300 motion-reduce:transition-none",
+                    "py-8 lg:py-6 pl-0 lg:pl-4 lg:-ml-4 lg:border-l-2 transition-[border-color,opacity] duration-300 motion-reduce:transition-none",
                     !isLast && "border-b border-b-gray-200 dark:border-b-gray-800",
-                    isActive
-                      ? "border-l-foreground opacity-100"
-                      : "border-l-transparent opacity-50",
+                    isDesktop
+                      ? isActive
+                        ? "border-l-foreground opacity-100"
+                        : "border-l-transparent opacity-50"
+                      : "opacity-100",
                   )}
                 >
                   <div className="flex items-baseline justify-between gap-4 mb-2">
@@ -162,9 +159,22 @@ export default function Work() {
                     <p className="type-body line-clamp-3 max-w-xl mb-3">{summary}</p>
                   ) : null}
 
-                  <p className="font-mono text-xs text-muted-foreground line-clamp-2">
+                  <p className="font-mono text-xs text-muted-foreground line-clamp-2 mb-4 lg:mb-0">
                     {project.tech.join(" · ")}
                   </p>
+
+                  {/* Mobile: image + links live with the project */}
+                  <div className="lg:hidden space-y-4">
+                    <div className="relative aspect-[16/10] overflow-hidden bg-white dark:bg-gray-900">
+                      <img
+                        src={project.image || "/placeholder.svg"}
+                        alt={project.title}
+                        className="h-full w-full object-contain"
+                        loading="lazy"
+                      />
+                    </div>
+                    <ProjectLinks project={project} />
+                  </div>
                 </article>
               )
             })}
