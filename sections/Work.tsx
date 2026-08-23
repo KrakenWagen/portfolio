@@ -5,7 +5,7 @@ export default function Work() {
   return (
     <section id="work" className="py-20 px-6 border-t border-gray-200 dark:border-gray-800">
       <div className="container mx-auto max-w-4xl">
-        <h2 className="text-5xl font-black mb-12">Selected Work</h2>
+        <h2 className="type-section-title mb-12">Selected Work</h2>
         <div className="space-y-16">
           {portfolioConfig.projects.map((project, index) => (
             <div key={index} className="grid md:grid-cols-2 gap-8 items-center">
@@ -20,15 +20,15 @@ export default function Work() {
               </div>
               <div className={`${index % 2 === 1 ? "md:order-1" : ""}`}>
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-2xl font-medium">{project.title}</h3>
-                  <span className="text-gray-500 dark:text-gray-400 text-sm">{project.year}</span>
+                  <h3 className="type-card-title">{project.title}</h3>
+                  <span className="type-meta">{project.year}</span>
                 </div>
-                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-6">{project.description.split('\n').map((e, i) => <span key={i}>{e}<br /></span>)}</p>
+                <p className="type-body mb-6">{project.description.split('\n').map((e, i) => <span key={i}>{e}<br /></span>)}</p>
                 <div className="flex flex-wrap gap-2 mb-6">
                   {project.tech.map((tech) => (
                     <span
                       key={tech}
-                      className="text-sm text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-full"
+                      className="type-label bg-muted px-3 py-1 rounded-full normal-case tracking-normal"
                     >
                       {tech}
                     </span>
@@ -37,28 +37,28 @@ export default function Work() {
                 <div className="flex gap-4">
                   {project.github && <a
                     href={project.github}
-                    className="inline-flex items-center text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors border-b border-transparent hover:border-black dark:hover:border-white pb-1"
+                    className="type-link inline-flex items-center text-muted-foreground hover:text-foreground transition-colors border-b border-transparent hover:border-foreground pb-1"
                   >
                     <Github className="w-4 h-4 mr-2" />
                     View Code
                   </a>}
                  {project.youtube && <a
                     href={project.youtube}
-                    className="inline-flex items-center text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors border-b border-transparent hover:border-black dark:hover:border-white pb-1"
+                    className="type-link inline-flex items-center text-muted-foreground hover:text-foreground transition-colors border-b border-transparent hover:border-foreground pb-1"
                   >
                     <YoutubeIcon className="w-4 h-4 mr-2" />
                     Watch video
                   </a>}
                  {project.live && <a
                     href={project.live}
-                    className="inline-flex items-center text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors border-b border-transparent hover:border-black dark:hover:border-white pb-1"
+                    className="type-link inline-flex items-center text-muted-foreground hover:text-foreground transition-colors border-b border-transparent hover:border-foreground pb-1"
                   >
                     <ExternalLink className="w-4 h-4 mr-2" />
                     Live Demo
                   </a>}
                  {project.read && <a
                     href={project.read}
-                    className="inline-flex items-center text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors border-b border-transparent hover:border-black dark:hover:border-white pb-1"
+                    className="type-link inline-flex items-center text-muted-foreground hover:text-foreground transition-colors border-b border-transparent hover:border-foreground pb-1"
                   >
                     <ExternalLink className="w-4 h-4 mr-2" />
                     Read

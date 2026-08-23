@@ -74,7 +74,7 @@ export default function Hero({ onTerminalClick, showNav }: HeroProps) {
       </Button>
 
       <div className="text-center relative z-10">
-        <h1 className="text-[12vw] font-black uppercase tracking-widest">
+        <h1 className="type-hero">
           <span
             key={currentWord}
             className="inline-block animate-fade-in"
@@ -86,10 +86,13 @@ export default function Hero({ onTerminalClick, showNav }: HeroProps) {
             {portfolioConfig.hero.words[currentWord]}
           </span>
         </h1>
-        <p className="text-lg md:text-xl lg:text-2xl text-gray-800 dark:text-gray-200 font-light"
-        style={{
-          textShadow: "0 0 6px var(--background), 0 0 32px var(--background)",
-        }}>
+        <p
+          className="type-hero-sub"
+          style={{
+            textShadow:
+              "0 0 12px var(--background), 0 0 32px var(--background), 0 2px 24px var(--background)",
+          }}
+        >
           {portfolioConfig.personal.name} • {portfolioConfig.personal.title}
         </p>
       </div>

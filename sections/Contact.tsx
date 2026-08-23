@@ -5,29 +5,29 @@ export default function Contact() {
   return (
     <section id="contact" className="py-20 px-6 border-t border-gray-200 dark:border-gray-800">
       <div className="container mx-auto max-w-4xl">
-        <h2 className="text-6xl font-black mb-12">Get In Touch</h2>
+        <h2 className="type-section-title mb-12">Get In Touch</h2>
         <div className="grid md:grid-cols-2 gap-12">
           <div>
-            <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-8">
+            <p className="type-body mb-8">
               {portfolioConfig.contact.description}
             </p>
             <div className="space-y-4" >
-              <a className="inline-flex items-center text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors border-b border-transparent hover:border-black dark:hover:border-white pb-1" href={`mailto:${portfolioConfig.personal.email}`}>
-                <Mail className="w-5 h-5 mr-3 text-gray-600 dark:text-gray-400" />
-                <span className="text-gray-700 dark:text-gray-300">{portfolioConfig.personal.email}</span>
+              <a className="type-link inline-flex items-center text-muted-foreground hover:text-foreground transition-colors border-b border-transparent hover:border-foreground pb-1" href={`mailto:${portfolioConfig.personal.email}`}>
+                <Mail className="w-5 h-5 mr-3 text-muted-foreground/80" />
+                <span>{portfolioConfig.personal.email}</span>
               </a>
-              <a className="inline-flex items-center text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors border-b border-transparent hover:border-black dark:hover:border-white pb-1" href={portfolioConfig.personal.linkedin}>
-                <LinkedinIcon className="w-5 h-5 mr-3 text-gray-600 dark:text-gray-400"/>
-                <span className="text-gray-700 dark:text-gray-300">{portfolioConfig.personal.linkedin.replaceAll('https://', '')}</span>
+              <a className="type-link inline-flex items-center text-muted-foreground hover:text-foreground transition-colors border-b border-transparent hover:border-foreground pb-1" href={portfolioConfig.personal.linkedin}>
+                <LinkedinIcon className="w-5 h-5 mr-3 text-muted-foreground/80"/>
+                <span>{portfolioConfig.personal.linkedin.replaceAll('https://', '')}</span>
               </a>
-              <a className="inline-flex items-center text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors border-b border-transparent hover:border-black dark:hover:border-white pb-1" href={portfolioConfig.personal.github}>
-                <Github className="w-5 h-5 mr-3 text-gray-600 dark:text-gray-400"/>
-                <span className="text-gray-700 dark:text-gray-300">{portfolioConfig.personal.github.replaceAll('https://', '')}</span>
+              <a className="type-link inline-flex items-center text-muted-foreground hover:text-foreground transition-colors border-b border-transparent hover:border-foreground pb-1" href={portfolioConfig.personal.github}>
+                <Github className="w-5 h-5 mr-3 text-muted-foreground/80"/>
+                <span>{portfolioConfig.personal.github.replaceAll('https://', '')}</span>
               </a>
             </div>
           </div>
           <div>
-            <div className="text-gray-700 dark:text-gray-300 leading-relaxed">
+            <div className="type-body">
               {portfolioConfig.contact.availability.map((item, index) => (
                 <div key={index}>
                   {item}
