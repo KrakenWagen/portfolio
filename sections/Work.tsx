@@ -1,93 +1,203 @@
+"use client"
+
+import { useEffect, useRef, useState } from "react"
 import { Github, ExternalLink, YoutubeIcon } from "lucide-react"
 import { portfolioConfig } from "@/config/portfolio"
 import Reveal from "@/components/reveal"
 import SectionHeader from "@/components/section-header"
+import { cn } from "@/lib/utils"
+
+function projectSummary(description: string) {
+  return description
+    .split(/\n+/)
+    .map((part) => part.trim())
+    .find(Boolean)
+}
+
+type Project = (typeof portfolioConfig.projects)[number]
+
+function ProjectLinks({ project, className }: { project: Project; className?: string }) {
+  const links = [
+    project.github && { href: project.github, label: "Code", icon: Github },
+    project.youtube && { href: project.youtube, label: "Video", icon: YoutubeIcon },
+    project.live && { href: project.live, label: "Live", icon: ExternalLink },
+    project.read && { href: project.read, label: "Paper", icon: ExternalLink },
+  ].filter(Boolean) as { href: string; label: string; icon: typeof Github }[]
+
+  if (links.length === 0) return null
+
+  return (
+    <div className={cn("flex flex-wrap gap-x-4 gap-y-2", className)}>
+      {links.map(({ href, label, icon: Icon }) => (
+        <a
+          key={label}
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="type-link inline-flex items-center text-muted-foreground hover:text-foreground transition-colors border-b border-transparent hover:border-foreground pb-0.5"
+        >
+          <Icon className="w-4 h-4 mr-2" />
+          {label}
+        </a>
+      ))}
+    </div>
+  )
+}
 
 export default function Work() {
+  const projects = portfolioConfig.projects
+  const itemRefs = useRef<(HTMLElement | null)[]>([])
+  const scrollingRef = useRef(false)
+  const scrollClearTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const [scrollIndex, setScrollIndex] = useState(0)
+  const [hoverIndex, setHoverIndex] = useState<number | null>(null)
+  const activeIndex = hoverIndex ?? scrollIndex
+  const activeProject = projects[activeIndex]
+
+  useEffect(() => {
+    const items = itemRefs.current.filter(Boolean) as HTMLElement[]
+    if (items.length === 0) return
+
+    const updateActiveFromScroll = () => {
+      // While scrolling, scroll owns the active state — clear hover so they don't fight
+      scrollingRef.current = true
+      setHoverIndex(null)
+
+      if (scrollClearTimer.current) clearTimeout(scrollClearTimer.current)
+      scrollClearTimer.current = setTimeout(() => {
+        scrollingRef.current = false
+      }, 120)
+
+      const marker = window.scrollY + window.innerHeight * 0.38
+
+      let nextIndex = 0
+      for (let i = items.length - 1; i >= 0; i--) {
+        if (items[i].offsetTop <= marker) {
+          nextIndex = i
+          break
+        }
+      }
+
+      setScrollIndex((prev) => (prev === nextIndex ? prev : nextIndex))
+    }
+
+    updateActiveFromScroll()
+    window.addEventListener("scroll", updateActiveFromScroll, { passive: true })
+    window.addEventListener("resize", updateActiveFromScroll)
+
+    return () => {
+      window.removeEventListener("scroll", updateActiveFromScroll)
+      window.removeEventListener("resize", updateActiveFromScroll)
+      if (scrollClearTimer.current) clearTimeout(scrollClearTimer.current)
+    }
+  }, [projects.length])
+
+  const handleItemEnter = (index: number) => {
+    if (scrollingRef.current) return
+    setHoverIndex(index)
+  }
+
   return (
-    <section id="work" className="py-20 px-6 border-t border-gray-200 dark:border-gray-800">
-      <div className="container mx-auto max-w-4xl">
+    <section id="work" className="py-24 px-6 border-t border-gray-200 dark:border-gray-800">
+      <div className="container mx-auto max-w-5xl">
         <Reveal>
-          <SectionHeader title="Selected Work" number="04" />
+          <SectionHeader
+            title="Selected Work"
+            number="04"
+            subtitle="Research, games, and systems I shipped when the brief was fuzzy and the constraints were not."
+          />
         </Reveal>
-        <div className="space-y-16">
-          {portfolioConfig.projects.map((project, index) => (
-            <Reveal key={index} delay={60}>
-              <div className="grid md:grid-cols-2 gap-8 items-center">
-                <div className={`${index % 2 === 1 ? "md:order-2" : ""}`}>
-                  <div className="aspect-video bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden">
-                    <img
-                      src={project.image || "/placeholder.svg"}
-                      alt={project.title}
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                    />
+
+        {/* Mobile visual */}
+        <Reveal delay={60} className="lg:hidden mb-8">
+          <div className="relative aspect-[16/10] overflow-hidden bg-white dark:bg-gray-900">
+            {projects.map((project, index) => (
+              <img
+                key={`${project.title}-mobile`}
+                src={project.image || "/placeholder.svg"}
+                alt=""
+                className={cn(
+                  "absolute inset-0 h-full w-full object-contain transition-opacity duration-700 motion-reduce:transition-none",
+                  index === activeIndex ? "opacity-100" : "opacity-0",
+                )}
+              />
+            ))}
+          </div>
+          <ProjectLinks project={activeProject} className="mt-4" />
+        </Reveal>
+
+        <div className="border-t border-gray-200 dark:border-gray-800 lg:grid lg:grid-cols-[minmax(0,1.15fr)_minmax(260px,0.8fr)] lg:gap-14 lg:items-start">
+          <div
+            className="border-b border-gray-200 dark:border-gray-800 lg:border-b-0"
+            onMouseLeave={() => setHoverIndex(null)}
+          >
+            {projects.map((project, index) => {
+              const summary = projectSummary(project.description)
+              const isActive = index === activeIndex
+              const isLast = index === projects.length - 1
+
+              return (
+                <article
+                  key={`${project.title}-${project.year}`}
+                  ref={(el) => {
+                    itemRefs.current[index] = el
+                  }}
+                  onMouseEnter={() => handleItemEnter(index)}
+                  className={cn(
+                    "py-6 pl-4 -ml-4 border-l-2 transition-[border-color,opacity] duration-300 motion-reduce:transition-none",
+                    !isLast && "border-b border-b-gray-200 dark:border-b-gray-800",
+                    isActive
+                      ? "border-l-foreground opacity-100"
+                      : "border-l-transparent opacity-50",
+                  )}
+                >
+                  <div className="flex items-baseline justify-between gap-4 mb-2">
+                    <span className="type-label">{String(index + 1).padStart(2, "0")}</span>
+                    <time className="type-label">{project.year}</time>
                   </div>
-                </div>
-                <div className={`${index % 2 === 1 ? "md:order-1" : ""}`}>
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="type-card-title">{project.title}</h3>
-                    <span className="type-meta">{project.year}</span>
-                  </div>
-                  <p className="type-body mb-6">
-                    {project.description.split("\n").map((e, i) => (
-                      <span key={i}>
-                        {e}
-                        <br />
-                      </span>
-                    ))}
+
+                  <h3 className="type-item-title mb-2 max-w-xl">{project.title}</h3>
+
+                  {summary ? (
+                    <p className="type-body line-clamp-3 max-w-xl mb-3">{summary}</p>
+                  ) : null}
+
+                  <p className="font-mono text-xs text-muted-foreground line-clamp-2">
+                    {project.tech.join(" · ")}
                   </p>
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    {project.tech.map((tech) => (
-                      <span
-                        key={tech}
-                        className="type-label bg-muted px-3 py-1 rounded-full normal-case tracking-normal"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="flex gap-4">
-                    {project.github && (
-                      <a
-                        href={project.github}
-                        className="type-link inline-flex items-center text-muted-foreground hover:text-foreground transition-colors border-b border-transparent hover:border-foreground pb-1"
-                      >
-                        <Github className="w-4 h-4 mr-2" />
-                        View Code
-                      </a>
-                    )}
-                    {project.youtube && (
-                      <a
-                        href={project.youtube}
-                        className="type-link inline-flex items-center text-muted-foreground hover:text-foreground transition-colors border-b border-transparent hover:border-foreground pb-1"
-                      >
-                        <YoutubeIcon className="w-4 h-4 mr-2" />
-                        Watch video
-                      </a>
-                    )}
-                    {project.live && (
-                      <a
-                        href={project.live}
-                        className="type-link inline-flex items-center text-muted-foreground hover:text-foreground transition-colors border-b border-transparent hover:border-foreground pb-1"
-                      >
-                        <ExternalLink className="w-4 h-4 mr-2" />
-                        Live Demo
-                      </a>
-                    )}
-                    {project.read && (
-                      <a
-                        href={project.read}
-                        className="type-link inline-flex items-center text-muted-foreground hover:text-foreground transition-colors border-b border-transparent hover:border-foreground pb-1"
-                      >
-                        <ExternalLink className="w-4 h-4 mr-2" />
-                        Read
-                      </a>
-                    )}
-                  </div>
+                </article>
+              )
+            })}
+          </div>
+
+          {/* Desktop sticky preview */}
+          <div className="hidden lg:block sticky top-28 pt-8">
+            <div className="relative w-full overflow-hidden bg-white dark:bg-gray-900 aspect-[16/10]">
+              {projects.map((project, index) => (
+                <div
+                  key={`${project.title}-visual`}
+                  className={cn(
+                    "absolute inset-0 transition-opacity duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none",
+                    index === activeIndex ? "opacity-100 z-10" : "opacity-0 z-0",
+                  )}
+                  aria-hidden={index !== activeIndex}
+                >
+                  <img
+                    src={project.image || "/placeholder.svg"}
+                    alt=""
+                    className="h-full w-full object-contain"
+                  />
+                  <span className="absolute top-3 right-3 type-label bg-background/80 px-2 py-1 backdrop-blur-sm">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
                 </div>
-              </div>
-            </Reveal>
-          ))}
+              ))}
+            </div>
+
+            <div className="mt-5 min-h-[1.75rem]">
+              <ProjectLinks project={activeProject} />
+            </div>
+          </div>
         </div>
       </div>
     </section>
