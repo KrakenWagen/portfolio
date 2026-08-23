@@ -1,9 +1,9 @@
-import React, { useRef, useMemo, useState, useEffect } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { useFBO } from "@react-three/drei";
-import { Leva, folder, useControls } from "leva";
-import * as THREE from "three";
-import { v4 as uuidv4 } from "uuid";
+"use client"
+
+import React, { useRef, useMemo, useState, useEffect } from "react"
+import { Canvas, useFrame, useThree } from "@react-three/fiber"
+import { useFBO } from "@react-three/drei"
+import * as THREE from "three"
 
 const vertexShader = `
 varying vec3 worldNormal;
@@ -18,7 +18,7 @@ void main() {
   worldNormal = normalize(mat3(modelMatrix) * normal);
   eyeVector = normalize(worldPos.xyz - cameraPosition);
 }
-`;
+`
 
 const fragmentShader = `
 uniform float uOpacity;
@@ -47,14 +47,8 @@ varying vec3 eyeVector;
 vec3 sat(vec3 rgb, float adjustment) {
   const vec3 W = vec3(0.2125, 0.7154, 0.0721);
   float intensity = dot(rgb, W);
-
-  // Clamp adjustment to [0, 2] to avoid negative or extreme values
   adjustment = clamp(adjustment, 0.0, 2.0);
-
-  // Interpolate between grayscale intensity and rgb
   vec3 color = mix(vec3(intensity), rgb, adjustment);
-
-  // Clamp final color so no negative values
   return max(color, vec3(0.0));
 }
 
@@ -78,7 +72,7 @@ float specular(vec3 light, float shininess, float diffuseness) {
   return kSpecular + kDiffuse * diffuseness;
 }
 
-const int LOOP = 16;
+const int LOOP = 12;
 
 void main() {
   float iorRatioRed = 1.0/uIorR;
@@ -88,16 +82,17 @@ void main() {
   vec2 uv = gl_FragCoord.xy / winResolution.xy;
   vec3 normal = normalize(worldNormal);
   vec3 color = vec3(0.0);
+  vec3 eye = normalize(eyeVector);
 
   for (int i = 0; i < LOOP; i++) {
     float slide = float(i) / float(LOOP) * 0.1;
 
-    vec3 refractVecR = refract(normalize(eyeVector), normal, iorRatioRed);
-    vec3 refractVecY = refract(normalize(eyeVector), normal, 1.0/uIorY);
-    vec3 refractVecG = refract(normalize(eyeVector), normal, iorRatioGreen);
-    vec3 refractVecC = refract(normalize(eyeVector), normal, 1.0/uIorC);
-    vec3 refractVecB = refract(normalize(eyeVector), normal, iorRatioBlue);
-    vec3 refractVecP = refract(normalize(eyeVector), normal, 1.0/uIorP);
+    vec3 refractVecR = refract(eye, normal, iorRatioRed);
+    vec3 refractVecY = refract(eye, normal, 1.0/uIorY);
+    vec3 refractVecG = refract(eye, normal, iorRatioGreen);
+    vec3 refractVecC = refract(eye, normal, 1.0/uIorC);
+    vec3 refractVecB = refract(eye, normal, iorRatioBlue);
+    vec3 refractVecP = refract(eye, normal, 1.0/uIorP);
 
     float r = texture2D(uTexture, uv + refractVecR.xy * (uRefractPower + slide * 1.0) * uChromaticAberration).x * 0.5;
 
@@ -130,7 +125,6 @@ void main() {
 
   color /= float(LOOP);
 
-  // HACK:
   float bgLuminance = dot(color, vec3(0.4, 1.0, 0.8));
 
   float specularLight = specular(uLight, uShininess, uDiffuseness);
@@ -142,204 +136,187 @@ void main() {
   color = color / (color + vec3(1.0));
   color = pow(color, vec3(1.0 / 2.2));
 
-  // HACK: Adaptive saturation boost for brighter backgrounds
   float contrast = mix(1.0, 6.0, smoothstep(0.0, 1.0, bgLuminance));
   vec3 midpoint = vec3(0.74);
   color = (color - midpoint) * contrast + midpoint;
-  
+
   gl_FragColor = vec4(color, uOpacity);
-
 }
-`;
+`
 
+const SETTINGS = {
+  light: new THREE.Vector3(-1.0, 1.0, 1.0),
+  diffuseness: 0.2,
+  shininess: 15.0,
+  fresnelPower: 8.0,
+  iorR: 1.96,
+  iorY: 1.68,
+  iorG: 1.18,
+  iorC: 1.22,
+  iorB: 1.22,
+  iorP: 1.22,
+  saturation: 1.14,
+  chromaticAberration: 0.5,
+  refraction: 0.25,
+}
 
-function LerpedBackground() {
-  const [color, setColor] = useState(() =>
-    getComputedStyle(document.body)
-      .backgroundColor
-  );
+function ThemeBackground() {
+  const { scene } = useThree()
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      const cssColor = getComputedStyle(document.body)
-        .backgroundColor;
+    const apply = () => {
+      const cssColor = getComputedStyle(document.body).backgroundColor
+      if (!cssColor) return
+      scene.background = new THREE.Color(cssColor)
+    }
 
-      if (cssColor && cssColor !== color) {
-        setColor(cssColor);
-      }
-    }, 150); // check every 150ms
+    apply()
 
-    return () => clearInterval(interval);
-  }, [color]);
+    const observer = new MutationObserver(apply)
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    })
 
-  return <color attach="background" args={[color]} />;
+    return () => observer.disconnect()
+  }, [scene])
+
+  return null
 }
 
-function Geometries() {
-  const mesh = useRef(null);
-  const backgroundGroup = useRef(null);
-  const mainRenderTarget = useFBO();
-  const backRenderTarget = useFBO();
-
-  const {
-    
-    light,
-    shininess,
-    diffuseness,
-    fresnelPower,
-    iorR,
-    iorY,
-    iorG,
-    iorC,
-    iorB,
-    iorP,
-    saturation,
-    chromaticAberration,
-    refraction,
-  } = useControls({
-    light: { value: new THREE.Vector3(-1.0, 1.0, 1.0) },
-    diffuseness: { value: 0.2 },
-    shininess: { value: 15.0 },
-    fresnelPower: { value: 8.0 },
-    ior: folder({
-      iorR: { min: 1.0, max: 2.333, step: 0.001, value: 1.96 },
-      iorY: { min: 1.0, max: 2.333, step: 0.001, value: 1.68 },
-      iorG: { min: 1.0, max: 2.333, step: 0.001, value: 1.18 },
-      iorC: { min: 1.0, max: 2.333, step: 0.001, value: 1.22 },
-      iorB: { min: 1.0, max: 2.333, step: 0.001, value: 1.22 },
-      iorP: { min: 1.0, max: 2.333, step: 0.001, value: 1.22 },
-    }),
-    saturation: { value: 1.14, min: 1, max: 1.25, step: 1.11 },
-    chromaticAberration: { value: 0.5, min: 0, max: 1.5, step: 0.01 },
-    refraction: { value: 0.25, min: 0, max: 1, step: 0.01 },
-  });
+function Geometries({ active }) {
+  const mesh = useRef(null)
+  const mainRenderTarget = useFBO()
+  const backRenderTarget = useFBO()
 
   const uniforms = useMemo(
     () => ({
       uOpacity: { value: 0 },
       uTexture: { value: null },
-      uIorR: { value: iorR },
-      uIorY: { value: iorY },
-      uIorG: { value: iorG },
-      uIorC: { value: iorC },
-      uIorB: { value: iorB },
-      uIorP: { value: iorP },
-      uRefractPower: { value: refraction },
-      uChromaticAberration: { value: chromaticAberration },
-      uSaturation: { value: saturation },
-      uShininess: { value: shininess },
-      uDiffuseness: { value: diffuseness },
-      uFresnelPower: { value: fresnelPower },
-      uLight: { value: light },
+      uIorR: { value: SETTINGS.iorR },
+      uIorY: { value: SETTINGS.iorY },
+      uIorG: { value: SETTINGS.iorG },
+      uIorC: { value: SETTINGS.iorC },
+      uIorB: { value: SETTINGS.iorB },
+      uIorP: { value: SETTINGS.iorP },
+      uRefractPower: { value: SETTINGS.refraction },
+      uChromaticAberration: { value: SETTINGS.chromaticAberration },
+      uSaturation: { value: SETTINGS.saturation },
+      uShininess: { value: SETTINGS.shininess },
+      uDiffuseness: { value: SETTINGS.diffuseness },
+      uFresnelPower: { value: SETTINGS.fresnelPower },
+      uLight: { value: SETTINGS.light.clone() },
       winResolution: {
         value: new THREE.Vector2(
-          window.innerWidth,
-          window.innerHeight
-        ).multiplyScalar(Math.min(window.devicePixelRatio, 2)),
+          typeof window !== "undefined" ? window.innerWidth : 1,
+          typeof window !== "undefined" ? window.innerHeight : 1,
+        ).multiplyScalar(
+          typeof window !== "undefined" ? Math.min(window.devicePixelRatio, 1) : 1,
+        ),
       },
     }),
-    [
-      iorR, iorY, iorG, iorC, iorB, iorP,
-      refraction, chromaticAberration, saturation,
-      shininess, diffuseness, fresnelPower, light,
-    ]
-  );
+    [],
+  )
 
-  useFrame(({ gl, scene, camera, clock }) => {
-    if (!mesh.current) return;
+  useFrame(({ gl, scene, camera, clock, size }) => {
+    if (!active || !mesh.current) return
 
-    const elapsed = clock.getElapsedTime();
-    const fadeDuration = 1; // seconds
-    const opacity = Math.min(elapsed / fadeDuration, 1);
-    
-    mesh.current.material.uniforms.uOpacity.value = opacity;
+    const elapsed = clock.getElapsedTime()
+    const opacity = Math.min(elapsed / 1, 1)
+    const material = mesh.current.material
+    const u = material.uniforms
 
-    const t = clock.getElapsedTime();
-    mesh.current.rotation.x = Math.sin(t * 0.3) * 0.5;
-    mesh.current.rotation.y = Math.cos(t * 0.5) * 0.8;
-    mesh.current.rotation.z = Math.sin(t * 0.2 + Math.PI / 3) * 0.3;
+    u.uOpacity.value = opacity
+    u.winResolution.value.set(size.width, size.height)
 
-    mesh.current.visible = false;
+    const t = elapsed
+    mesh.current.rotation.x = Math.sin(t * 0.3) * 0.5
+    mesh.current.rotation.y = Math.cos(t * 0.5) * 0.8
+    mesh.current.rotation.z = Math.sin(t * 0.2 + Math.PI / 3) * 0.3
 
-    mesh.current.material.uniforms.uDiffuseness.value = diffuseness;
-    mesh.current.material.uniforms.uShininess.value = shininess;
-    mesh.current.material.uniforms.uLight.value.copy(light);
-    mesh.current.material.uniforms.uFresnelPower.value = fresnelPower;
-    mesh.current.material.uniforms.uIorR.value = iorR;
-    mesh.current.material.uniforms.uIorY.value = iorY;
-    mesh.current.material.uniforms.uIorG.value = iorG;
-    mesh.current.material.uniforms.uIorC.value = iorC;
-    mesh.current.material.uniforms.uIorB.value = iorB;
-    mesh.current.material.uniforms.uIorP.value = iorP;
-    mesh.current.material.uniforms.uSaturation.value = saturation;
-    mesh.current.material.uniforms.uChromaticAberration.value = chromaticAberration;
-    mesh.current.material.uniforms.uRefractPower.value = refraction;
+    mesh.current.visible = false
 
-    gl.setRenderTarget(backRenderTarget);
-    gl.render(scene, camera);
+    gl.setRenderTarget(backRenderTarget)
+    gl.render(scene, camera)
 
-    mesh.current.material.uniforms.uTexture.value = backRenderTarget.texture;
-    mesh.current.material.side = THREE.BackSide;
+    u.uTexture.value = backRenderTarget.texture
+    material.side = THREE.BackSide
+    mesh.current.visible = true
 
-    mesh.current.visible = true;
+    gl.setRenderTarget(mainRenderTarget)
+    gl.render(scene, camera)
 
-    gl.setRenderTarget(mainRenderTarget);
-    gl.render(scene, camera);
+    u.uTexture.value = mainRenderTarget.texture
+    material.side = THREE.FrontSide
 
-    mesh.current.material.uniforms.uTexture.value = mainRenderTarget.texture;
-    mesh.current.material.side = THREE.FrontSide;
-
-    gl.setRenderTarget(null);
-  });
+    gl.setRenderTarget(null)
+  })
 
   return (
     <>
-      <LerpedBackground/>
-      <group ref={backgroundGroup} visible={false}>
-        <mesh position={[-4, -3, -4]}>
-          <icosahedronGeometry args={[2, 16]} />
-          <meshBasicMaterial color="white" />
-        </mesh>
-        <mesh position={[4, -3, -4]}>
-          <icosahedronGeometry args={[2, 16]} />
-          <meshBasicMaterial color="white" />
-        </mesh>
-        <mesh position={[-5, 3, -4]}>
-          <icosahedronGeometry args={[2, 16]} />
-          <meshBasicMaterial color="white" />
-        </mesh>
-        <mesh position={[5, 3, -4]}>
-          <icosahedronGeometry args={[2, 16]} />
-          <meshBasicMaterial color="white" />
-        </mesh>
-      </group>
+      <ThemeBackground />
       <mesh ref={mesh}>
-        <torusKnotGeometry args={[3, 0.5, 200, 32, 2, 3]} />
+        <torusKnotGeometry args={[3, 0.5, 256, 48, 2, 3]} />
         <shaderMaterial
-          key={uuidv4()}
           vertexShader={vertexShader}
           fragmentShader={fragmentShader}
           uniforms={uniforms}
           side={THREE.FrontSide}
+          transparent
         />
       </mesh>
     </>
-  );
+  )
 }
 
-function Scene() {
+export default function Scene() {
+  const containerRef = useRef(null)
+  const [visible, setVisible] = useState(true)
+  const [reducedMotion, setReducedMotion] = useState(false)
+  const active = visible && !reducedMotion
+
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)")
+    const sync = () => setReducedMotion(media.matches)
+    sync()
+    media.addEventListener("change", sync)
+    return () => media.removeEventListener("change", sync)
+  }, [])
+
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setVisible(entry.isIntersecting),
+      { threshold: 0.05 },
+    )
+
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
   return (
-    <>
-      <Leva collapsed hidden/>
-      <Canvas camera={{ position: [4, -2, 7], fov: 75 }} dpr={[1, 2]} style={{
-        opacity: 0,    
-        animation: "fadeIn 3s ease-in-out forwards",
-      }}>
-        <ambientLight intensity={1.0} />
-        <Geometries />
-      </Canvas>
-    </>
-  );
+    <div ref={containerRef} className="h-full w-full">
+      {!reducedMotion ? (
+        <Canvas
+          camera={{ position: [4, -2, 7], fov: 75 }}
+          dpr={1}
+          frameloop={active ? "always" : "never"}
+          gl={{
+            antialias: false,
+            powerPreference: "high-performance",
+            alpha: false,
+          }}
+          style={{
+            opacity: 0,
+            animation: "fadeIn 3s ease-in-out forwards",
+          }}
+        >
+          <ambientLight intensity={1.0} />
+          <Geometries active={active} />
+        </Canvas>
+      ) : null}
+    </div>
+  )
 }
-
-export default Scene;
