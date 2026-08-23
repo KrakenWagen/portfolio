@@ -207,8 +207,12 @@ export const portfolioConfig = {
 
   contact: {
     description:
-      "I'm always interested in new collaborations. Feel free to reach out if you'd like to work together.",
-    availability: ["Zaragoza 🇪🇸 • Warsaw 🇵🇱 • Tampere 🇫🇮"],
+      "If something here resonates, write me. Happy to talk, research, software, or whatever is on your mind.",
+    availability: [
+      { city: "Zaragoza", country: "ES" as const },
+      { city: "Warsaw", country: "PL" as const },
+      { city: "Tampere", country: "FI" as const },
+    ],
   },
   footer: <p className="text-gray-500 dark:text-gray-400 text-sm text-center">
             Made with{" "}
