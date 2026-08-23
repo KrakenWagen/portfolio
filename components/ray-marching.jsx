@@ -22,6 +22,11 @@ void main() {
 
 const fragmentShader = `
 uniform float uOpacity;
+uniform float uTime;
+uniform float uGrainScale;
+uniform float uGrainAmount;
+uniform float uGrainSatBias;
+uniform float uGrainMotion;
 
 uniform float uIorR;
 uniform float uIorY;
@@ -140,6 +145,20 @@ void main() {
   vec3 midpoint = vec3(0.74);
   color = (color - midpoint) * contrast + midpoint;
 
+  // Temporal grain — uGrainMotion 0 = static, 1 = full animation rate
+  vec2 grainCoord = floor(gl_FragCoord.xy / max(uGrainScale, 1.0));
+  float motionTick = floor(uTime * 60.0 * clamp(uGrainMotion, 0.0, 1.0));
+  grainCoord += vec2(motionTick * 1.7, motionTick * 2.3) * step(1e-4, uGrainMotion);
+  float dither = fract(sin(dot(grainCoord, vec2(12.9898, 78.233))) * 43758.5453);
+
+  float vmax = max(color.r, max(color.g, color.b));
+  float vmin = min(color.r, min(color.g, color.b));
+  // Cheap saturation approx: chroma relative to value (0 for greys / black / white)
+  float satApprox = clamp(vmax > 1e-4 ? (vmax - vmin) / vmax : 0.0, 0.0, 1.0);
+  float grainMask = clamp(mix(1.0, satApprox, clamp(uGrainSatBias, 0.0, 1.0)), 0.0, 1.0);
+
+  color += (dither - 0.5) * uGrainAmount * grainMask;
+
   gl_FragColor = vec4(color, uOpacity);
 }
 `
@@ -158,6 +177,12 @@ const SETTINGS = {
   saturation: 1.14,
   chromaticAberration: 0.5,
   refraction: 0.25,
+  grainScale: 1,
+  grainAmount: 0.125,
+  // 0 = frozen grain, 1 = animated (~60 Hz)
+  grainMotion: 0.125,
+  // 0 = uniform grain, 1 = grain only on saturated colors
+  grainSatBias: 0.75,
 }
 
 function ThemeBackground() {
@@ -192,6 +217,11 @@ function Geometries({ active }) {
   const uniforms = useMemo(
     () => ({
       uOpacity: { value: 0 },
+      uTime: { value: 0 },
+      uGrainScale: { value: SETTINGS.grainScale },
+      uGrainAmount: { value: SETTINGS.grainAmount },
+      uGrainSatBias: { value: SETTINGS.grainSatBias },
+      uGrainMotion: { value: SETTINGS.grainMotion },
       uTexture: { value: null },
       uIorR: { value: SETTINGS.iorR },
       uIorY: { value: SETTINGS.iorY },
@@ -206,19 +236,12 @@ function Geometries({ active }) {
       uDiffuseness: { value: SETTINGS.diffuseness },
       uFresnelPower: { value: SETTINGS.fresnelPower },
       uLight: { value: SETTINGS.light.clone() },
-      winResolution: {
-        value: new THREE.Vector2(
-          typeof window !== "undefined" ? window.innerWidth : 1,
-          typeof window !== "undefined" ? window.innerHeight : 1,
-        ).multiplyScalar(
-          typeof window !== "undefined" ? Math.min(window.devicePixelRatio, 1) : 1,
-        ),
-      },
+      winResolution: { value: new THREE.Vector2(1, 1) },
     }),
     [],
   )
 
-  useFrame(({ gl, scene, camera, clock, size }) => {
+  useFrame(({ gl, scene, camera, clock }) => {
     if (!active || !mesh.current) return
 
     const elapsed = clock.getElapsedTime()
@@ -227,7 +250,9 @@ function Geometries({ active }) {
     const u = material.uniforms
 
     u.uOpacity.value = opacity
-    u.winResolution.value.set(size.width, size.height)
+    u.uTime.value = elapsed
+    // Must match gl_FragCoord (device pixels), not CSS size — otherwise DPR skews refraction UVs
+    gl.getDrawingBufferSize(u.winResolution.value)
 
     const t = elapsed
     mesh.current.rotation.x = Math.sin(t * 0.3) * 0.5
@@ -304,7 +329,7 @@ export default function Scene() {
           dpr={1}
           frameloop={active ? "always" : "never"}
           gl={{
-            antialias: false,
+            antialias: true,
             powerPreference: "high-performance",
             alpha: false,
           }}
