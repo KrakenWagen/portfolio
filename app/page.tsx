@@ -14,6 +14,7 @@ import Experience from "@/sections/Experience"
 import Education from "@/sections/Education"
 import Work from "@/sections/Work"
 import Contact from "@/sections/Contact"
+import Footer from "@/components/footer"
 
 export default function Portfolio() {
   const [showTerminal, setShowTerminal] = useState(false)
@@ -203,12 +204,7 @@ export default function Portfolio() {
       <Work />
       <Contact />
 
-      {/* Footer */}
-      <footer className="py-8 px-6 border-t border-gray-200 dark:border-gray-800">
-        <div className="container mx-auto max-w-4xl">
-        {portfolioConfig.footer}
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 }

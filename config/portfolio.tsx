@@ -214,8 +214,4 @@ export const portfolioConfig = {
       { city: "Tampere", country: "FI" as const },
     ],
   },
-  footer: <p className="text-gray-500 dark:text-gray-400 text-sm text-center">
-            Made with{" "}
-            <span className="text-red-500">❤</span> in T2, Adolfo Suárez Madrid-Barajas
-          </p>
 }
