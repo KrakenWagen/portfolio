@@ -1,13 +1,14 @@
 import { Github, ExternalLink, YoutubeIcon } from "lucide-react"
 import { portfolioConfig } from "@/config/portfolio"
 import Reveal from "@/components/reveal"
+import SectionHeader from "@/components/section-header"
 
 export default function Work() {
   return (
     <section id="work" className="py-20 px-6 border-t border-gray-200 dark:border-gray-800">
       <div className="container mx-auto max-w-4xl">
         <Reveal>
-          <h2 className="type-section-title mb-12">Selected Work</h2>
+          <SectionHeader title="Selected Work" number="04" />
         </Reveal>
         <div className="space-y-16">
           {portfolioConfig.projects.map((project, index) => (

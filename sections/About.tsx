@@ -1,5 +1,6 @@
 import { portfolioConfig } from "@/config/portfolio"
 import Reveal from "@/components/reveal"
+import SectionHeader from "@/components/section-header"
 
 export default function About() {
   const { lead, description, domains, toolGroups } = portfolioConfig.about
@@ -8,10 +9,7 @@ export default function About() {
     <section id="about" className="py-24 px-6 border-t border-gray-200 dark:border-gray-800">
       <div className="container mx-auto max-w-4xl">
         <Reveal>
-          <div className="flex items-baseline justify-between gap-6 mb-10">
-            <h2 className="type-section-title">About</h2>
-            <span className="type-label shrink-0">01</span>
-          </div>
+          <SectionHeader title="About" number="01" className="mb-10" />
         </Reveal>
 
         <Reveal delay={60}>

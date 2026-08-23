@@ -1,12 +1,13 @@
 import { Mail, Github, LinkedinIcon } from "lucide-react"
 import { portfolioConfig } from "@/config/portfolio"
 import Reveal from "@/components/reveal"
+import SectionHeader from "@/components/section-header"
 
 export default function Contact() {
   return (
     <section id="contact" className="py-20 px-6 border-t border-gray-200 dark:border-gray-800">
       <Reveal className="container mx-auto max-w-4xl">
-        <h2 className="type-section-title mb-12">Get In Touch</h2>
+        <SectionHeader title="Get In Touch" number="05" />
         <div className="grid md:grid-cols-2 gap-12">
           <div>
             <p className="type-body mb-8">

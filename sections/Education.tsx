@@ -1,12 +1,13 @@
 import { portfolioConfig } from "@/config/portfolio"
 import Reveal from "@/components/reveal"
+import SectionHeader from "@/components/section-header"
 
 export default function Education() {
   return (
     <section id="education" className="py-20 px-6 border-t border-gray-200 dark:border-gray-800">
       <div className="container mx-auto max-w-4xl">
         <Reveal>
-          <h2 className="type-section-title mb-12">Education</h2>
+          <SectionHeader title="Education" number="03" />
         </Reveal>
         <div className="space-y-12">
           {portfolioConfig.education.map((edu, index) => (
