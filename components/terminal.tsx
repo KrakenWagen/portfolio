@@ -102,13 +102,20 @@ export default function Terminal({ onExit }: TerminalProps) {
         break
       case "about":
         newHistory.push({
-          text: (portfolioConfig.about.description.concat(
-            ["Some specific technologies:"].concat( 
-              portfolioConfig.about.tools.map((skill) => `• ${skill}`)).join("\n")
-            )
-          ).join("\n\n"),
+          text: [
+            portfolioConfig.about.lead,
+            ...portfolioConfig.about.description,
+            "",
+            "Focus:",
+            ...portfolioConfig.about.domains.map((domain) => `• ${domain}`),
+            "",
+            "Toolkit:",
+            ...portfolioConfig.about.toolGroups.map(
+              (group) => `• ${group.label}: ${group.items.join(", ")}`,
+            ),
+          ].join("\n"),
           type: "info",
-        })        
+        })
         break
       case "experience":
         portfolioConfig.experience.forEach((job, index) => {

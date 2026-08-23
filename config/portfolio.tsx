@@ -26,47 +26,60 @@ export const portfolioConfig = {
   ],
 
   about: {
+    lead: "Software engineer and tech enthusiast with 10+ years of experience building software.",
     description: [
-      "Software engineer and tech enthusiast with 10+ years of experience building software.", "Reasoning across hardware, software, and maths to solve messy, cross-disciplinary problems.", "Artificial Intelligence, backend and full-stack development, graphics and computer vision, distributed systems, robotics, reverse engineering, videogames...",
+      "Reasoning across hardware, software, and maths to solve messy, cross-disciplinary problems.",
     ],
-    tools: [
-      // Core languages & ecosystems
-      "TypeScript, Python, C++, Rust, Java, .NET, Assembly",
-
-      // Frontend & interactive systems
-      "React, Next.js, WebGL, Three.js, WASM",
-
-      // Backend & systems
-      "Node.js, FastAPI, Ruby on Rails",
-
-      // Graphics, vision, robotics
-      "OpenGL, Vulkan, CUDA, OpenCV, ROS",
-
-      // Machine learning & AI (applied)
-      "TensorFlow, PyTorch",
-
-      // Random
-      "Bartending",
-
-      // Game
-      "Unity, Unreal Engine",
-
-      // Data & storage
-      "PostgreSQL, MySQL, DynamoDB, Redis",
-
-      // Infrastructure & deployment
-      "Docker, Kubernetes, AWS, Terraform, Ansible",
-
-      // CI/CD & build systems
-      "Git, CMake",
-
-      // OS, performance & debugging
-      "Linux, Profilers, Debuggers",
-
-      // Math & scientific computing
-      "NumPy, SciPy, Polars, Airflow",
-
-      "etc"
+    domains: [
+      "Artificial Intelligence",
+      "Backend & full-stack",
+      "Graphics & computer vision",
+      "Distributed systems",
+      "Robotics",
+      "Reverse engineering",
+      "Videogames",
+    ],
+    toolGroups: [
+      {
+        label: "Languages",
+        items: ["TypeScript", "Python", "C++", "Rust", "Java", ".NET", "Assembly"],
+      },
+      {
+        label: "Frontend",
+        items: ["React", "Next.js", "WebGL", "Three.js", "WASM"],
+      },
+      {
+        label: "Backend",
+        items: ["Node.js", "FastAPI", "Ruby on Rails"],
+      },
+      {
+        label: "Graphics",
+        items: ["OpenGL", "Vulkan", "CUDA", "OpenCV", "ROS", "WebGL", "Three.js"],
+      },
+      {
+        label: "AI",
+        items: ["TensorFlow", "PyTorch"],
+      },
+      {
+        label: "Games",
+        items: ["Unity", "Unreal Engine"],
+      },
+      {
+        label: "Data",
+        items: ["PostgreSQL", "MySQL", "DynamoDB", "Redis", "NumPy", "SciPy", "Polars", "Airflow"],
+      },
+      {
+        label: "Infra",
+        items: ["Docker", "Kubernetes", "AWS", "Terraform", "Ansible", "Git", "CMake"],
+      },
+      {
+        label: "Systems",
+        items: ["Linux", "Profilers", "Debuggers"],
+      },
+      {
+        label: "Other",
+        items: ["Bartending"],
+      },
     ],
   },
 
