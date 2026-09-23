@@ -30,14 +30,31 @@ export const portfolioConfig = {
     description: [
       "Reasoning across hardware, software, and maths to solve messy, cross-disciplinary problems.",
     ],
-    domains: [
-      "Artificial Intelligence",
-      "Backend & full-stack",
-      "Graphics & computer vision",
-      "Distributed systems",
-      "Robotics",
-      "Reverse engineering",
-      "Videogames",
+    focus: [
+      {
+        title: "Artificial Intelligence",
+        description: "Generative, attention, segmentation, LLMs, and everything in between.",
+      },
+      {
+        title: "Computer Vision",
+        description: "Images, video, and what to notice in them. AI-powered or not.",
+      },
+      {
+        title: "Robotics",
+        description: "Machines that perceive, predict, and move together in the real world.",
+      },
+      {
+        title: "Graphics",
+        description: "Light, rendering, and real-time images.",
+      },
+      {
+        title: "Backend & full-stack",
+        description: "End-to-end products, distributed systems, and reverse engineering.",
+      },
+      {
+        title: "Videogames",
+        description: "Game engines, bots, networking and games built from scratch.",
+      },
     ],
     toolGroups: [
       {

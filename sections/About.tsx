@@ -1,10 +1,21 @@
+import { Bot, BrainCircuit, Gamepad2, ScanBox, ScanEye, Server, type LucideIcon } from "lucide-react"
 import { portfolioConfig } from "@/config/portfolio"
 import Reveal from "@/components/reveal"
 import SectionHeader from "@/components/section-header"
 import ToolkitMarquee from "@/components/toolkit-marquee"
+import { cn } from "@/lib/utils"
+
+const focusIcons: Record<string, LucideIcon> = {
+  "Artificial Intelligence": BrainCircuit,
+  "Computer Vision": ScanEye,
+  Robotics: Bot,
+  Graphics: ScanBox,
+  "Backend & full-stack": Server,
+  Videogames: Gamepad2,
+}
 
 export default function About() {
-  const { lead, description, domains, toolGroups } = portfolioConfig.about
+  const { lead, description, focus, toolGroups } = portfolioConfig.about
 
   return (
     <section id="about" className="py-24 px-6 border-t border-gray-200 dark:border-gray-800">
@@ -32,20 +43,30 @@ export default function About() {
         <Reveal delay={80}>
           <div className="mb-16">
             <h3 className="type-label mb-6">Focus</h3>
-            <ul className="border-t border-gray-200 dark:border-gray-800">
-              {domains.map((domain, index) => (
-                <li
-                  key={domain}
-                  className="group flex items-baseline gap-4 md:gap-8 py-4 border-b border-gray-200 dark:border-gray-800"
-                >
-                  <span className="type-label w-8 shrink-0 tabular-nums">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-                  <span className="type-item-title font-medium transition-colors group-hover:text-foreground">
-                    {domain}
-                  </span>
-                </li>
-              ))}
+            <ul className="grid grid-cols-1 sm:grid-cols-3">
+              {focus.map((field, index) => {
+                const Icon = focusIcons[field.title]
+                const lastRowStart = focus.length - (focus.length % 3 || 3)
+                return (
+                  <li
+                    key={field.title}
+                    className={cn(
+                      "px-5 py-6 border-gray-200 dark:border-gray-800",
+                      index < focus.length - 1 && "max-sm:border-b",
+                      index % 3 !== 2 && "sm:border-r",
+                      index < lastRowStart && "sm:border-b",
+                    )}
+                  >
+                    {Icon ? (
+                      <Icon className="mb-8 ml-auto block size-12 text-muted-foreground" strokeWidth={1.5} aria-hidden="true" />
+                    ) : null}
+                    <h4 className="font-sans text-xl font-semibold leading-snug tracking-[-0.02em] text-foreground">
+                      {field.title}
+                    </h4>
+                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{field.description}</p>
+                  </li>
+                )
+              })}
             </ul>
           </div>
         </Reveal>

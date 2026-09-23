@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useLayoutEffect, useRef } from "react"
 import { portfolioConfig } from "@/config/portfolio"
 
 interface TerminalProps {
@@ -21,6 +21,8 @@ export default function Terminal({ onExit }: TerminalProps) {
   const [showSuggestions, setShowSuggestions] = useState(false)
   const terminalRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+  const suggestionsRef = useRef<HTMLDivElement>(null)
+  const [placeSuggestionsAbove, setPlaceSuggestionsAbove] = useState(false)
 
   const availableCommands = [
     "help",
@@ -107,7 +109,9 @@ export default function Terminal({ onExit }: TerminalProps) {
             ...portfolioConfig.about.description,
             "",
             "Focus:",
-            ...portfolioConfig.about.domains.map((domain) => `• ${domain}`),
+            ...portfolioConfig.about.focus.map(
+              (field) => `• ${field.title} — ${field.description}`,
+            ),
             "",
             "Toolkit:",
             ...portfolioConfig.about.toolGroups.map(
@@ -236,15 +240,68 @@ export default function Terminal({ onExit }: TerminalProps) {
     }
   }, [])
 
+  const focusInput = () => {
+    const selection = window.getSelection()
+    if (selection && !selection.isCollapsed) return
+    inputRef.current?.focus()
+  }
+
+  const handleTerminalMouseDown = (e: React.MouseEvent) => {
+    const target = e.target as HTMLElement
+    if (inputRef.current?.contains(target)) return
+    if (target.closest("[data-terminal-output]")) return
+    e.preventDefault()
+    inputRef.current?.focus()
+  }
+
+  useLayoutEffect(() => {
+    if (!showSuggestions || suggestions.length === 0) {
+      setPlaceSuggestionsAbove(false)
+      return
+    }
+
+    const container = terminalRef.current
+    const suggestionsEl = suggestionsRef.current
+    if (!container || !suggestionsEl || placeSuggestionsAbove) return
+
+    const overflow =
+      suggestionsEl.getBoundingClientRect().bottom - container.getBoundingClientRect().bottom
+    if (overflow > 8) {
+      setPlaceSuggestionsAbove(true)
+    }
+  }, [showSuggestions, suggestions, placeSuggestionsAbove, terminalHistory, currentCommand])
+
+  useEffect(() => {
+    if (!showSuggestions || placeSuggestionsAbove) return
+    suggestionsRef.current?.scrollIntoView({ block: "nearest" })
+  }, [showSuggestions, placeSuggestionsAbove, suggestions])
+
+  const suggestionList = (
+    <>
+      <div className="text-gray-500 text-sm">
+        Suggestions:{" "}
+        {suggestions.map((suggestion, index) => (
+          <span key={suggestion} className="text-cyan-300">
+            {suggestion}
+            {index < suggestions.length - 1 ? ", " : ""}
+          </span>
+        ))}
+      </div>
+      <div className="text-gray-500 text-xs mt-1">Press Tab to autocomplete</div>
+    </>
+  )
+
   return (
-    <div className="h-dvh bg-black text-white font-mono p-4 overflow-hidden animate-tv-on">
+    <div className="flex h-dvh flex-col overflow-hidden bg-black font-mono text-white animate-tv-on">
       <div
         ref={terminalRef}
-        className="h-dvh overflow-y-auto scrollbar-thin scrollbar-thumb-green-600 scrollbar-track-gray-800"
+        className="min-h-0 flex-1 cursor-text overflow-y-auto p-4 scrollbar-thin scrollbar-thumb-green-600 scrollbar-track-gray-800"
+        onMouseDown={handleTerminalMouseDown}
+        onMouseUp={focusInput}
       >
         <div className="mb-4">
           {terminalHistory.map((entry, index) => (
-            <div key={index} className="whitespace-pre-wrap">
+            <div key={index} data-terminal-output className="whitespace-pre-wrap">
               {entry.type === "command" ? (
                 <div className="flex">
                   <span className="text-green-400">{portfolioConfig.terminal.whoami}</span>
@@ -278,41 +335,40 @@ export default function Terminal({ onExit }: TerminalProps) {
             </div>
           ))}
 
-          <div className="flex items-center relative">
-            <span className="text-green-400">{portfolioConfig.terminal.whoami}</span>
-            <span className="text-white">@</span>
-            <span className="text-blue-400">portfolio</span>
-            <span className="text-white">:</span>
-            <span className="text-purple-400">~</span>
-            <span className="text-white">$ </span>
-            <input
-              ref={inputRef}
-              type="text"
-              value={currentCommand}
-              onChange={handleInputChange}
-              onKeyDown={handleKeyDown}
-              className="bg-transparent border-none outline-none text-yellow-300 flex-1 ml-1"
-              autoComplete="off"
-              spellCheck="false"
-            />
-            <span className="animate-pulse text-white">█</span>
-          </div>
-
-          {/* Autocomplete suggestions */}
-          {showSuggestions && suggestions.length > 0 && (
-            <div className="mt-2 ml-6">
-              <div className="text-gray-500 text-sm">
-                Suggestions:{" "}
-                {suggestions.map((suggestion, index) => (
-                  <span key={suggestion} className="text-cyan-300">
-                    {suggestion}
-                    {index < suggestions.length - 1 ? ", " : ""}
-                  </span>
-                ))}
-              </div>
-              <div className="text-gray-500 text-xs mt-1">Press Tab to autocomplete</div>
+          <div className="relative">
+            <div className="flex items-center">
+              <span className="text-green-400">{portfolioConfig.terminal.whoami}</span>
+              <span className="text-white">@</span>
+              <span className="text-blue-400">portfolio</span>
+              <span className="text-white">:</span>
+              <span className="text-purple-400">~</span>
+              <span className="text-white">$ </span>
+              <input
+                ref={inputRef}
+                type="text"
+                value={currentCommand}
+                onChange={handleInputChange}
+                onKeyDown={handleKeyDown}
+                className="ml-1 flex-1 border-none bg-transparent text-yellow-300 outline-none"
+                autoComplete="off"
+                spellCheck="false"
+              />
+              <span className="animate-pulse text-white">█</span>
             </div>
-          )}
+
+            {showSuggestions && suggestions.length > 0 && (
+              <div
+                ref={suggestionsRef}
+                className={
+                  placeSuggestionsAbove
+                    ? "absolute bottom-full left-0 right-0 z-10 mb-1 bg-black pb-1 pl-6"
+                    : "mt-2 pl-6"
+                }
+              >
+                {suggestionList}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
