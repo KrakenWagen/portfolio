@@ -1,6 +1,7 @@
 import { portfolioConfig } from "@/config/portfolio"
 import Reveal from "@/components/reveal"
 import SectionHeader from "@/components/section-header"
+import ToolkitMarquee from "@/components/toolkit-marquee"
 
 export default function About() {
   const { lead, description, domains, toolGroups } = portfolioConfig.about
@@ -50,24 +51,13 @@ export default function About() {
         </Reveal>
 
         <Reveal delay={60}>
-          <div>
-            <h3 className="type-label mb-6">Toolkit</h3>
-            <div className="space-y-5">
-              {toolGroups.map((group) => (
-                <div
-                  key={group.label}
-                  className="grid grid-cols-1 sm:grid-cols-[7.5rem_1fr] gap-2 sm:gap-6 items-baseline"
-                >
-                  <span className="type-label">{group.label}</span>
-                  <p className="font-mono text-sm leading-relaxed text-muted-foreground">
-                    {group.items.join(" · ")}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
+          <h3 className="type-label mb-6">Toolkit</h3>
         </Reveal>
       </div>
+
+      <Reveal delay={80} className="-mx-6">
+        <ToolkitMarquee groups={toolGroups} />
+      </Reveal>
     </section>
   )
 }
