@@ -30,12 +30,12 @@ function uniqueNames(groups: ToolGroup[]) {
   return names
 }
 
-function TechMark({ name }: { name: string }) {
+function TechMark({ name, className }: { name: string; className?: string }) {
   const mark = techMarks[name]
 
   if (mark) {
     return (
-      <svg viewBox={mark.viewBox} className="size-5 shrink-0 text-foreground" aria-hidden="true">
+      <svg viewBox={mark.viewBox} className={cn("size-5 shrink-0", className)} aria-hidden="true">
         <path fill="currentColor" d={mark.path} />
       </svg>
     )
@@ -58,9 +58,9 @@ function TechMark({ name }: { name: string }) {
 
 function TechCard({ name }: { name: string }) {
   return (
-    <li className="flex shrink-0 items-center gap-2.5 rounded-md border border-foreground/10 bg-foreground/[0.03] px-3.5 py-2.5 transition-colors hover:border-foreground/25 hover:bg-foreground/[0.06]">
+    <li className="flex shrink-0 items-center gap-2.5 rounded-md bg-foreground/[0.03] px-3.5 py-2.5 transition-colors hover:bg-foreground/[0.06] hover:text-foreground text-muted-foreground">
       <TechMark name={name} />
-      <span className="whitespace-nowrap font-mono text-sm text-foreground">{name}</span>
+      <span className="whitespace-nowrap font-mono text-sm">{name}</span>
     </li>
   )
 }
