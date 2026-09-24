@@ -2,6 +2,7 @@ import { portfolioConfig } from "@/config/portfolio"
 import Reveal from "@/components/reveal"
 import SectionHeader from "@/components/section-header"
 import Flag from "@/components/flag"
+import BasedAroundMap from "@/components/based-around-map"
 
 const channels = [
   {
@@ -83,6 +84,7 @@ export default function Contact() {
                 </li>
               ))}
             </ul>
+            <BasedAroundMap />
           </div>
         </Reveal>
       </div>

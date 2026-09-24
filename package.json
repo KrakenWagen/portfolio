@@ -19,6 +19,7 @@
     "clsx": "^2.1.1",
     "leva": "^0.10.1",
     "lucide-react": "^1.47.0",
+    "maplibre-gl": "^6.11.1",
     "next": "16.1.5",
     "next-themes": "^0.4.6",
     "react": "^19.2.4",
@@ -30,6 +31,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.3",
     "@tailwindcss/postcss": "^4.1.18",
+    "@types/geojson": "^7946.0.16",
     "@types/node": "^20.19.30",
     "@types/react": "^19.2.9",
     "@types/react-dom": "^19.2.3",

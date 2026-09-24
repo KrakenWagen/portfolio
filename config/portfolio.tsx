@@ -226,9 +226,9 @@ export const portfolioConfig = {
     description:
       "If something here resonates, write me. Happy to talk, research, software, or whatever is on your mind.",
     availability: [
-      { city: "Zaragoza", country: "ES" as const },
-      { city: "Warsaw", country: "PL" as const },
-      { city: "Tampere", country: "FI" as const },
+      { city: "Zaragoza", country: "ES" as const, coordinates: [-0.8891, 41.6488] as [number, number] },
+      { city: "Warsaw", country: "PL" as const, coordinates: [21.0122, 52.2297] as [number, number] },
+      { city: "Tampere", country: "FI" as const, coordinates: [23.761, 61.4978] as [number, number] },
     ],
   },
 }
