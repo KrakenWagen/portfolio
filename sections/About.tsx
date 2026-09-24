@@ -58,7 +58,7 @@ export default function About() {
                     )}
                   >
                     {Icon ? (
-                      <Icon className="mb-8 ml-auto block size-12 text-muted-foreground" strokeWidth={1.5} aria-hidden="true" />
+                      <Icon className="mb-8 ml-auto block size-12 sm:size-8 lg:size-10 text-muted-foreground" strokeWidth={1.5} aria-hidden="true" />
                     ) : null}
                     <h4 className="font-sans text-xl font-semibold leading-snug tracking-[-0.02em] text-foreground">
                       {field.title}
